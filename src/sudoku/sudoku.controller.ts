@@ -11,8 +11,14 @@ export class SudokuController {
   }
 
   @Post('new')
-  async create(@Body() ks: { puzzle: string; solution: string }[]) {
+  async create(
+    @Body() ks: { puzzle: string; solution: string }[],
+    @Query('sign') sign = '',
+  ) {
     console.log('批量创建参数:', ks);
+    if (sign !== this.sign) {
+      throw new Error('无效的 sign 参数');
+    }
     for (const k of ks) {
       if (!k.puzzle || !k.solution) {
         throw new Error('每个数独必须包含 puzzle 和 solution 字段');
